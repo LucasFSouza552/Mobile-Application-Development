@@ -41,7 +41,7 @@ export const ItemView = () => {
             style={styles.item}
             onPress={() => openEditModal(item)}
         >
-            <Text>{item.title}</Text>
+            <Text style={{color: theme.colors.secondary}}>{item.title}</Text>
         </TouchableOpacity>
     );
 
@@ -50,7 +50,7 @@ export const ItemView = () => {
             <Text style={{ color: theme.colors.secondary, ...styles.title }}>Lista de Itens</Text>
 
             <TouchableOpacity style={styles.addButton} onPress={openAddModal}>
-                <Text>Adicionar Item</Text>
+                <Text style={{ color: theme.colors.primary }}>Adicionar Item</Text>
 
             </TouchableOpacity>
 
