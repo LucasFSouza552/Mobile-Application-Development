@@ -34,9 +34,13 @@ export default function App() {
 
   const colorScheme = useColorScheme();
   return (
-    <PaperProvider theme={colorScheme === 'dark' ? theme.darkTheme : theme.lightTheme}>
-      <ItemView />
-    </PaperProvider >
+    <SafeAreaProvider>
+      <PaperProvider theme={colorScheme === 'dark' ? theme.darkTheme : theme.lightTheme}>
+        <SafeAreaView style={{ width: "100%", height: "100%" }}>
+          <ItemView />
+        </SafeAreaView>
+      </PaperProvider >
+    </SafeAreaProvider>
   )
 
 }
