@@ -1,4 +1,5 @@
 export type RootStackParamsList = {
     SplashView: undefined,
-    ItemView: undefined
+    ItemView: undefined,
+    PushExemple: undefined
 }

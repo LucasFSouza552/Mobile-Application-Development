@@ -14,11 +14,18 @@ import { useItemController } from "../controllers/itemController";
 import Item from "../models/item";
 
 import { useTheme } from 'react-native-paper';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamsList } from "../types/RootStackParamsList";
+import { useNavigation } from "expo-router";
 
 export const ItemView = () => {
     const theme = useTheme();
 
     const colorScheme = useColorScheme();
+
+
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
+
 
     const {
         items,
@@ -34,7 +41,7 @@ export const ItemView = () => {
         closeModal
     } = useItemController();
 
-    
+
     const renderItem = ({ item }: { item: Item }) => (
         <TouchableOpacity
             style={styles.item}
@@ -58,6 +65,13 @@ export const ItemView = () => {
                 keyExtractor={item => item.id}
             />
 
+            <TouchableOpacity
+                style={{ ...styles.button }}
+                onPress={() => navigation.push("PushExemple")}>
+                <Text>
+                    Exemplo de push
+                </Text>
+            </TouchableOpacity>
             <Modal
                 visible={modalVisible}
                 transparent={true}
@@ -97,6 +111,7 @@ export const ItemView = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
+
                 </View>
             </Modal>
         </View >

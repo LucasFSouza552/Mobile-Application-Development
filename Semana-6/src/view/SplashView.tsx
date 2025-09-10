@@ -1,13 +1,6 @@
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import {
     View,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    Modal,
-    TextInput,
-    StyleSheet,
-    useColorScheme,
     Image,
 } from 'react-native';
 import { NativeStackNavigationProp, } from "@react-navigation/native-stack";
@@ -15,7 +8,6 @@ import { RootStackParamsList } from '../types/RootStackParamsList';
 import { useEffect } from "react";
 
 export const SplashView = () => {
-
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
 
