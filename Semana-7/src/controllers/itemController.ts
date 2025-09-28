@@ -87,7 +87,6 @@ export const useItemController = () => {
     }, [])
 
     const setInputText = (text: string) => {
-        console.log(text)
         state.inputText = dispatch({ type: 'SET_INPUT_TEXT', payload: text });
     }
 
