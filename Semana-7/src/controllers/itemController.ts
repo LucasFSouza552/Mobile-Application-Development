@@ -24,7 +24,7 @@ function reducer(state: typeof initialState, action: any) {
         case 'OPEN_ADD_MODAL':
             return { ...state, inputText: '', editingItem: null, modalVisible: true, items: action.payload };
         case 'OPEN_EDIT_MODAL':
-            return { ...state, inputText: action.payload.title, editingItem: action.payload, modalVisible: true, items: action.payload };
+            return { ...state, inputText: action.editingItem.title, editingItem: action.editingItem, modalVisible: true, items: action.payload };
         case 'ADD_ITEM':
             return { ...state, inputText: action.payload.title, editingItem: null, modalVisible: false, items: action.payload };
         case 'UPDATE_ITEM':
@@ -53,7 +53,7 @@ export const useItemController = () => {
     };
 
     const openEditModal = (item: Item) => {
-        dispatch({ type: 'OPEN_EDIT_MODAL', payload: item });
+        dispatch({ type: 'OPEN_EDIT_MODAL', payload: ItemService.getAllItems(), editingItem: item });
     };
 
     const addItem = async () => {
@@ -72,13 +72,14 @@ export const useItemController = () => {
             Alert.alert('Erro', 'Digite um título');
             return;
         }
-
+        const updateItem: Item = { id: state.editingItem.id, title: state.inputText.trim(), image: state.editingItem.image };
+        ItemService.updateItem(updateItem);
         dispatch({ type: 'UPDATE_ITEM', payload: ItemService.getAllItems() });
     };
 
     const deleteItem = () => {
         if (!state.editingItem) return;
-
+        ItemService.deleteItem(state.editingItem.id);
         dispatch({ type: 'DELETE_ITEM', payload: ItemService.getAllItems() });
     };
 
