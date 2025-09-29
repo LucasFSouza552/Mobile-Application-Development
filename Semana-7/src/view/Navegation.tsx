@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SplashView } from "./SplashView";
 import { ItemView } from "./ItemView";
 import { RootStackParamsList } from "../types/RootStackParamsList";
-import { Exemplo } from "./Exemple";
+import { ItemFullView } from "./ItemFullView";
 
 export const StackNavigation = () => {
     const Stack = createNativeStackNavigator<RootStackParamsList>();
@@ -13,7 +13,7 @@ export const StackNavigation = () => {
             <Stack.Navigator initialRouteName="SplashView" screenOptions={{ headerShown: false, orientation: 'portrait' }}>
                 <Stack.Screen name="SplashView" component={SplashView} />
                 <Stack.Screen name="ItemView" component={ItemView} />
-                <Stack.Screen name="PushExemple" component={Exemplo} />
+                <Stack.Screen name="ItemFullView" component={ItemFullView} />
             </Stack.Navigator>
         </NavigationContainer>
     );

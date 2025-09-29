@@ -6,7 +6,8 @@ export const lightTheme = {
         ...DefaultTheme.colors,
         background: "#FBFBFB",
         secondary: "#C4D9FF",
-        primary: "#C5BAFF"
+        primary: "#C5BAFF",
+        tertiary: "#000",
     },
 };
 
@@ -17,5 +18,6 @@ export const darkTheme = {
         background: "#1B3C53",
         secondary: "#456882",
         primary: "#234C6A",
+        tertiary: "#FFF",
     },
 };

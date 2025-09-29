@@ -1,84 +1,57 @@
-import React from "react";
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    Modal,
-    Image,
-    StyleSheet,
-    useWindowDimensions,
-} from 'react-native';
-
-import { useItemController } from "../controllers/itemController";
-import Item from "../models/item";
-import { Ionicons } from "@expo/vector-icons";
-
-import { useTheme } from 'react-native-paper';
+import { Image, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamsList } from "../types/RootStackParamsList";
-import { useNavigation } from "expo-router";
-import ToggleTheme from "./components/ToggleTheme";
-import { FormModalItem } from "./components/FormModalItem";
+import Item from "../models/item";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "react-native-paper";
+import ToggleTheme from "./components/ToggleTheme";
+import { Ionicons } from "@expo/vector-icons";
 
-export const ItemView = () => {
+
+export const ItemFullView = () => {
 
     const { colors } = useTheme();
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
 
-    const ItemController = useItemController();
     const styles = useResponsiveStyles();
 
-    const {
-        items,
-        openAddModal,
-        openViewItem,
-        openEditModal
-    } = ItemController;
+    const route = useRoute();
+    const { item } = route.params as { item: Item };
 
-    const renderItem = ({ item }: { item: Item }) => {
-        return (
-            <TouchableOpacity
-                style={styles.item}
-                onPress={() => {
-                    openViewItem(item)
-                    navigation.push('ItemFullView', { item })
-                }}
-                onLongPress={() => openEditModal(item)}
-            >
-                {item?.image && (
-                    <Image source={{ uri: item.image }} style={styles.image} />
-                )}
-
-                <Text style={[{ color: colors.tertiary }]}>{item.title}</Text>
-            </TouchableOpacity>
-        )
-    };
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
             <View style={styles.header}>
-                <Text style={[styles.title, { color: colors.tertiary }]}>Lista de Itens</Text>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={50} color={colors.tertiary} />
+                </TouchableOpacity>
+                <Text style={[styles.title, { color: colors.tertiary }]}>Editando Item</Text>
                 <ToggleTheme />
             </View>
 
-            <FlatList
-                data={items}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-                scrollIndicatorInsets={{ left: 1 }}
-                showsVerticalScrollIndicator={false}
-            />
+            <View style={styles.cardItem}>
+                {item?.image && (
+                    <Image source={{ uri: item.image }} style={styles.image} />
+                )}
+                <Text style={[styles.subTitle,{ color: colors.tertiary }]}>
+                    {item.title}
+                </Text>
 
-            <TouchableOpacity style={[styles.addButton, { backgroundColor: colors.primary }]} onPress={openAddModal}>
-                <Ionicons name="add" size={30} color={colors.tertiary} />
-            </TouchableOpacity>
+                
+            </View>
+            {/* <TouchableOpacity
+                onPress={() => navigation.push("")}>
+                <Text>
+                    Exemplo de Push
+                </Text>
+            </TouchableOpacity> */}
 
-            <FormModalItem {...ItemController} />
-        </SafeAreaView>
+
+        </SafeAreaView >
     );
 }
+
 const useResponsiveStyles = () => {
     const { width, height } = useWindowDimensions();
     const base = Math.min(width, height);
@@ -86,7 +59,7 @@ const useResponsiveStyles = () => {
     const responsiveFont = (size: number, maxSize: number = 24) =>
         Math.min(Math.round(size * (base / 375)), maxSize);
 
-    const imgSize = Math.min(width * 0.25, 120);
+    const imgSize = Math.min(width * 0.25, 300);
     const addBtnSize = Math.min(width * 0.12, 60);
     const paddingSize = Math.min(width * 0.015, 16);
 
@@ -98,6 +71,11 @@ const useResponsiveStyles = () => {
         title: {
             fontSize: responsiveFont(20, 28),
             fontWeight: 'bold',
+        },
+        subTitle: {
+            fontSize: responsiveFont(16, 18),
+            fontWeight: 'bold',
+            marginTop: Math.min(width * 0.015, 16),
         },
         addButton: {
             width: addBtnSize,
@@ -119,8 +97,16 @@ const useResponsiveStyles = () => {
         image: {
             width: imgSize,
             height: imgSize,
-            borderRadius: imgSize / 2,
+            borderRadius: imgSize / 6,
             marginRight: Math.min(width * 0.025, 10),
+        },
+        cardItem: {
+            padding: Math.min(width * 0.035, 20),
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            display: 'flex',
+            flex: 1,
         },
         modalOverlay: {
             flex: 1,

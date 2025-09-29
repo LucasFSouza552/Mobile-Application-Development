@@ -11,19 +11,21 @@ interface State {
 }
 
 const initialState: State = {
+    modalVisible: false,
     items: [],
     editingItem: null,
     inputText: '',
-    modalVisible: false,
 };
 
 function reducer(state: typeof initialState, action: any) {
     switch (action.type) {
         case 'CLOSE_MODAL':
-            return { ...state, inputText: '', editingItem: null, modalVisible: false, items: action.payload };
+            return { ...state, inputText: '', modalVisible: false, editingItem: null, items: action.payload };
         case 'OPEN_ADD_MODAL':
             return { ...state, inputText: '', editingItem: null, modalVisible: true, items: action.payload };
-        case 'OPEN_EDIT_MODAL':
+        case 'OPEN_VIEW_ITEM':
+            return { ...state, inputText: action.editingItem.title, editingItem: action.editingItem, modalVisible: false, items: action.payload };
+        case 'OPEN_ITEM_MODAL':
             return { ...state, inputText: action.editingItem.title, editingItem: action.editingItem, modalVisible: true, items: action.payload };
         case 'ADD_ITEM':
             return { ...state, inputText: action.payload.title, editingItem: null, modalVisible: false, items: action.payload };
@@ -52,8 +54,12 @@ export const useItemController = () => {
         dispatch({ type: 'OPEN_ADD_MODAL', payload: ItemService.getAllItems() });
     };
 
+    const openViewItem = (item: Item) => {
+        dispatch({ type: 'OPEN_VIEW_ITEM', payload: ItemService.getAllItems(), editingItem: item });
+    };
+
     const openEditModal = (item: Item) => {
-        dispatch({ type: 'OPEN_EDIT_MODAL', payload: ItemService.getAllItems(), editingItem: item });
+        dispatch({ type: 'OPEN_ITEM_MODAL', payload: ItemService.getAllItems(), editingItem: item });
     };
 
     const addItem = async () => {
@@ -65,7 +71,6 @@ export const useItemController = () => {
         await ItemService.addItem(state.inputText.trim(), 100, 100);
         dispatch({ type: 'ADD_ITEM', payload: ItemService.getAllItems() });
     };
-
 
     const updateItem = () => {
         if (!state.inputText.trim() || !state.editingItem) {
@@ -84,7 +89,7 @@ export const useItemController = () => {
     };
 
     useEffect(() => {
-        dispatch({type: 'LOAD_ITEMS', payload: ItemService.getAllItems()});
+        dispatch({ type: 'LOAD_ITEMS', payload: ItemService.getAllItems() });
     }, [])
 
     const setInputText = (text: string) => {
@@ -99,8 +104,9 @@ export const useItemController = () => {
         deleteItem,
         closeModal,
         openAddModal,
-        openEditModal,
-        dispatch
+        openViewItem,
+        dispatch,
+        openEditModal
     }
 
 }

@@ -1,6 +1,8 @@
-import { TextInput, TouchableOpacity, View, Text, StyleSheet, Modal } from "react-native";
+import { TextInput, TouchableOpacity, View, Text, StyleSheet, Modal, Dimensions, useWindowDimensions } from "react-native";
 import Item from "../../models/item";
 import { useTheme } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
+const { width, height } = Dimensions.get("window");
 
 interface Props {
     editingItem?: Item | null;
@@ -24,6 +26,7 @@ export const FormModalItem: React.FC<Props> = ({
     modalVisible
 }) => {
 
+    const styles = useResponsiveStyles();
     const { colors } = useTheme();
 
     return (
@@ -32,9 +35,9 @@ export const FormModalItem: React.FC<Props> = ({
             transparent={true}
             animationType="fade"
         >
-            <View style={styles.modalOverlay}>
+            <SafeAreaView style={styles.modalOverlay}>
                 <View style={[styles.dialog, { backgroundColor: colors.primary }]}>
-                    <Text style={styles.modalTitle}>
+                    <Text style={[styles.modalTitle, { color: colors.tertiary }]}>
                         {editingItem ? 'Editar Item' : 'Novo Item'}
                     </Text>
 
@@ -66,56 +69,63 @@ export const FormModalItem: React.FC<Props> = ({
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </SafeAreaView>
         </Modal>
     )
 }
 
+const useResponsiveStyles = () => {
+    const { width, height } = useWindowDimensions();
+    const base = Math.min(width, height);
 
-const styles = StyleSheet.create({
-    modalOverlay: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    dialog: {
-        borderRadius: 10,
-        padding: 20,
-        width: '80%',
-    },
-    modalTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    input: {
-        borderWidth: 2,
-        borderRadius: 5,
-        backgroundColor: '#ddd',
-        padding: 10,
-    },
-    button: {
-        backgroundColor: '#ddd',
-        padding: 8,
-        flex: 1,
-        marginHorizontal: 4,
-        alignItems: 'center',
-        borderRadius: 4,
-    },
-    buttons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 20,
-    },
-    buttonText: {
-        fontSize: 14,
-        fontWeight: '500',
-    },
-    deleteButton: {
-        backgroundColor: '#ffebee',
-    },
-    deleteButtonText: {
-        color: '#d32f2f',
-    },
-});
+    return StyleSheet.create({
+        modalOverlay: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        },
+        dialog: {
+            borderRadius: base * 0.02,
+            padding: base * 0.04,
+            width: Math.min(width * 0.9, 500),
+            backgroundColor: "#fff"
+        },
+        modalTitle: {
+            fontSize: Math.min(Math.max(base * 0.05, 16), 22),
+            fontWeight: 'bold',
+            marginBottom: base * 0.02,
+            textAlign: "center"
+        },
+        input: {
+            borderWidth: 2,
+            borderRadius: base * 0.015,
+            backgroundColor: '#ddd',
+            padding: base * 0.02,
+        },
+        button: {
+            backgroundColor: '#ddd',
+            paddingVertical: base * 0.015,
+            paddingHorizontal: base * 0.04,
+            flex: 1,
+            marginHorizontal: base * 0.01,
+            alignItems: 'center',
+            borderRadius: base * 0.015,
+        },
+        buttons: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: base * 0.02,
+        },
+        buttonText: {
+            fontSize: Math.min(Math.max(base * 0.04, 14), 18),
+            fontWeight: '500',
+        },
+        deleteButton: {
+            backgroundColor: '#ffebee',
+        },
+        deleteButtonText: {
+            color: '#d32f2f',
+        },
+    });
+};

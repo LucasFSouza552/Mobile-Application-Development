@@ -1,5 +1,7 @@
+import Item from "../models/item"
+
 export type RootStackParamsList = {
     SplashView: undefined,
     ItemView: undefined,
-    PushExemple: undefined
+    ItemFullView: { item: Item }
 }
